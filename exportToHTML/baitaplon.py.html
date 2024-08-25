@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>baitaplon.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #7a7e85;}
+.s3 { color: #bcbec4;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+baitaplon.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">cv2</span>
+<span class="s0">import </span><span class="s1">face_recognition</span>
+<span class="s0">import </span><span class="s1">os </span><span class="s2">#dùng để load toàn bộ kho ảnh</span>
+<span class="s0">import </span><span class="s1">numpy </span><span class="s0">as </span><span class="s1">np</span>
+<span class="s2"># b1 load anh tu kho anh pic 2</span>
+<span class="s1">path</span><span class="s3">=</span><span class="s4">&quot;pic2&quot;</span>
+<span class="s1">images </span><span class="s3">= []</span>
+<span class="s1">className </span><span class="s3">= []</span>
+<span class="s1">mylist </span><span class="s3">=</span><span class="s1">os</span><span class="s3">.</span><span class="s1">listdir</span><span class="s3">(</span><span class="s1">path</span><span class="s3">)</span><span class="s2"># kiểm tra toàn bộ tên file ảnh trong thư viện pic2</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">mylist</span><span class="s3">)</span>
+<span class="s0">for </span><span class="s1">cl </span><span class="s0">in </span><span class="s1">mylist</span><span class="s3">: </span><span class="s2"># lấy ra tên của file ảnh</span>
+    <span class="s1">curimg </span><span class="s3">= </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">imread</span><span class="s3">(</span><span class="s4">f&quot;</span><span class="s0">{</span><span class="s1">path</span><span class="s0">}</span><span class="s4">/</span><span class="s0">{</span><span class="s1">cl</span><span class="s0">}</span><span class="s4">&quot;</span><span class="s3">)</span><span class="s2"># đọc từng bức ảnh từ cv2 và đẩy về ma trận</span>
+    <span class="s1">images</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">curimg</span><span class="s3">)</span><span class="s2">#thêm toàn bộ ma trận điểm ảnh vào images</span>
+    <span class="s1">className</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">os</span><span class="s3">.</span><span class="s1">path</span><span class="s3">.</span><span class="s1">splitext</span><span class="s3">(</span><span class="s1">cl</span><span class="s3">)[</span><span class="s5">0</span><span class="s3">])</span><span class="s2">#tách tưng đoạn tên của tưng file trong danh sách ảnh đang chạy theo dấu chấm</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">images</span><span class="s3">))</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">images</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">className</span><span class="s3">)</span>
+<span class="s2"># b2 ma hoa cac anh</span>
+<span class="s0">def </span><span class="s1">Mahoa</span><span class="s3">(</span><span class="s1">images</span><span class="s3">):</span><span class="s2"># mã hóa list ma trânj</span>
+    <span class="s1">encodeList </span><span class="s3">= []</span><span class="s2">#tạo hàm rỗng vì khi load list ảnt thì phải đẩy từng ảnh vaod</span>
+    <span class="s0">for </span><span class="s1">img </span><span class="s0">in </span><span class="s1">images</span><span class="s3">:</span>
+        <span class="s1">img </span><span class="s3">= </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">cvtColor</span><span class="s3">(</span><span class="s1">img</span><span class="s3">, </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">COLOR_BGR2RGB</span><span class="s3">)</span><span class="s2"># chuyển ảnh bgr sang dạng rgb</span>
+        <span class="s2"># vì thư viện opcv mặc đinh là dang bgr hiện nay thì ảnh là ở dang rgb nên chuyển để tránh sai lệch màu sắc</span>
+        <span class="s1">encode </span><span class="s3">= </span><span class="s1">face_recognition</span><span class="s3">.</span><span class="s1">face_encodings</span><span class="s3">(</span><span class="s1">img</span><span class="s3">)[</span><span class="s5">0</span><span class="s3">]</span><span class="s2"># mã hóa từng bức ảnh lấy giá trị 0 vì là load từng bức ảnh nên vi trí mã hóa là 0</span>
+        <span class="s1">encodeList</span><span class="s3">.</span><span class="s1">append</span><span class="s3">(</span><span class="s1">encode</span><span class="s3">)</span><span class="s2">#đẩy các giá trị mã hóa vào encodelist</span>
+    <span class="s0">return </span><span class="s1">encodeList</span>
+<span class="s1">encodeListKnow </span><span class="s3">= </span><span class="s1">Mahoa</span><span class="s3">(</span><span class="s1">images</span><span class="s3">) </span><span class="s2">#gán các giá trị vừa mã hóa vào encode...</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s4">&quot;ma hoa thanh cong&quot;</span><span class="s3">)</span>
+<span class="s1">print</span><span class="s3">(</span><span class="s1">len</span><span class="s3">(</span><span class="s1">encodeListKnow</span><span class="s3">))</span>
+<span class="s2"># khoi dong webcam</span>
+<span class="s1">cap</span><span class="s3">= </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">VideoCapture</span><span class="s3">(</span><span class="s5">0</span><span class="s3">)</span>
+
+<span class="s0">while True</span><span class="s3">:</span>
+    <span class="s1">ret</span><span class="s3">, </span><span class="s1">frame</span><span class="s3">= </span><span class="s1">cap</span><span class="s3">.</span><span class="s1">read</span><span class="s3">()</span><span class="s2"># cap.read trả về 2 giá trị là ret và frame và ret là trả về giá trị true khi came load đc ảnh và false khi cam không load đc</span>
+    <span class="s1">frameS </span><span class="s3">= </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">resize</span><span class="s3">(</span><span class="s1">frame</span><span class="s3">,(</span><span class="s5">0</span><span class="s3">,</span><span class="s5">0</span><span class="s3">),</span><span class="s0">None</span><span class="s3">,</span><span class="s1">fx</span><span class="s3">=</span><span class="s5">0.5</span><span class="s3">,</span><span class="s1">fy</span><span class="s3">=</span><span class="s5">0.5</span><span class="s3">) </span><span class="s2"># thay đổi khung ảnh ban đầu với</span>
+    <span class="s1">frameS </span><span class="s3">= </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">cvtColor</span><span class="s3">(</span><span class="s1">frameS</span><span class="s3">, </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">COLOR_BGR2RGB</span><span class="s3">)</span><span class="s2"># chuyển về dang rgb</span>
+
+    <span class="s2"># xac dinh vi tri khuan mat</span>
+    <span class="s1">facecurFrame </span><span class="s3">= </span><span class="s1">face_recognition</span><span class="s3">.</span><span class="s1">face_locations</span><span class="s3">(</span><span class="s1">frameS</span><span class="s3">) </span><span class="s2"># lay tung frame ảnh trong video vao vi tri khuan mat hien tai</span>
+    <span class="s1">encodecurFrame </span><span class="s3">= </span><span class="s1">face_recognition</span><span class="s3">.</span><span class="s1">face_encodings</span><span class="s3">(</span><span class="s1">frameS</span><span class="s3">)</span><span class="s2">#mã hóa từng frame ảnh tại thời điển hiện tại</span>
+    <span class="s0">for </span><span class="s1">encodeFace</span><span class="s3">, </span><span class="s1">faceLoc </span><span class="s0">in </span><span class="s1">zip</span><span class="s3">(</span><span class="s1">encodecurFrame</span><span class="s3">,</span><span class="s1">facecurFrame</span><span class="s3">):</span><span class="s2">#chạy 2 biến encde và face để chạy ghép cặp giữa vị trí ảnh bất kì và đoạn mã hóa tại thời điểm đó</span>
+        <span class="s2">#matsches = face_recognition.compare_faces(encodeListKnow,encodeFace)#so sánh 2 cái mã hóa trong kho ảnh mà mã hóa ảnh tại cam</span>
+        <span class="s1">faceDis </span><span class="s3">= </span><span class="s1">face_recognition</span><span class="s3">.</span><span class="s1">face_distance</span><span class="s3">(</span><span class="s1">encodeListKnow</span><span class="s3">,</span><span class="s1">encodeFace</span><span class="s3">)</span><span class="s2">#so sánh sự khác nhau giữa 2 đaonj mã hóa</span>
+        <span class="s1">print</span><span class="s3">(</span><span class="s1">faceDis</span><span class="s3">)</span>
+        <span class="s1">matchIndex </span><span class="s3">= </span><span class="s1">np</span><span class="s3">.</span><span class="s1">argmin</span><span class="s3">(</span><span class="s1">faceDis</span><span class="s3">) </span><span class="s2"># day ve gia tri index nho nhat</span>
+
+        <span class="s0">if </span><span class="s1">faceDis</span><span class="s3">[</span><span class="s1">matchIndex</span><span class="s3">] &lt;</span><span class="s5">0.5 </span><span class="s3">:</span>
+            <span class="s1">name </span><span class="s3">= </span><span class="s1">className</span><span class="s3">[</span><span class="s1">matchIndex</span><span class="s3">].</span><span class="s1">upper</span><span class="s3">()</span>
+        <span class="s0">else</span><span class="s3">:</span>
+            <span class="s1">name </span><span class="s3">= </span><span class="s4">&quot; nguoi la&quot;</span>
+        <span class="s2"># ve ten len anh</span>
+        <span class="s1">y1</span><span class="s3">, </span><span class="s1">x2</span><span class="s3">,</span><span class="s1">y2</span><span class="s3">,</span><span class="s1">x1</span><span class="s3">= </span><span class="s1">faceLoc</span>
+        <span class="s1">y1</span><span class="s3">, </span><span class="s1">x2</span><span class="s3">, </span><span class="s1">y2</span><span class="s3">, </span><span class="s1">x1</span><span class="s3">= </span><span class="s1">y1</span><span class="s3">*</span><span class="s5">2</span><span class="s3">, </span><span class="s1">x2</span><span class="s3">*</span><span class="s5">2</span><span class="s3">,</span><span class="s1">y2</span><span class="s3">*</span><span class="s5">2</span><span class="s3">,</span><span class="s1">x1</span><span class="s3">*</span><span class="s5">2 </span><span class="s2"># vẽ ô vuông nhận dạng mặt vì tỉ lêk ảnh lấy 0.5 nên ô vuông phải nhân lên 2</span>
+        <span class="s1">cv2</span><span class="s3">.</span><span class="s1">rectangle</span><span class="s3">(</span><span class="s1">frame</span><span class="s3">,(</span><span class="s1">x1</span><span class="s3">,</span><span class="s1">y1</span><span class="s3">),(</span><span class="s1">x2</span><span class="s3">,</span><span class="s1">y2</span><span class="s3">),(</span><span class="s5">255</span><span class="s3">,</span><span class="s5">2</span><span class="s3">,</span><span class="s5">255</span><span class="s3">),</span><span class="s5">2</span><span class="s3">)</span>
+        <span class="s1">cv2</span><span class="s3">.</span><span class="s1">putText</span><span class="s3">(</span><span class="s1">frame</span><span class="s3">,</span><span class="s1">name</span><span class="s3">,(</span><span class="s1">x2</span><span class="s3">,</span><span class="s1">y2</span><span class="s3">),</span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">FONT_HERSHEY_COMPLEX</span><span class="s3">, </span><span class="s5">1</span><span class="s3">,(</span><span class="s5">155</span><span class="s3">,</span><span class="s5">255</span><span class="s3">,</span><span class="s5">255</span><span class="s3">),</span><span class="s5">2</span><span class="s3">)</span>
+    <span class="s1">cv2</span><span class="s3">.</span><span class="s1">imshow</span><span class="s3">(</span><span class="s4">'cam quan sat'</span><span class="s3">, </span><span class="s1">frame</span><span class="s3">)</span>
+    <span class="s0">if </span><span class="s1">cv2</span><span class="s3">.</span><span class="s1">waitKey</span><span class="s3">(</span><span class="s5">1</span><span class="s3">) == </span><span class="s1">ord</span><span class="s3">(</span><span class="s4">&quot;q&quot;</span><span class="s3">):</span>
+        <span class="s0">break</span>
+<span class="s1">cap</span><span class="s3">.</span><span class="s1">release</span><span class="s3">()</span>
+<span class="s1">cv2</span><span class="s3">.</span><span class="s1">destroyAllWindows</span><span class="s3">()</span></pre>
+</body>
+</html>
